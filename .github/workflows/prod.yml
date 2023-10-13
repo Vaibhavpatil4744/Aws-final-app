@@ -5,7 +5,7 @@ on:
       - "main"
 
 env:
-   AWS_REGION: ap-south-1
+   AWS_REGION: us-east-1
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
@@ -23,7 +23,7 @@ jobs:
        -name: Build, push docker image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: Aws-final-app 
+          REPOSITORY: aws-final-app 
           IMAGE_TAG: ${{ github.sha }}
         run: |-
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
@@ -31,9 +31,9 @@ jobs:
        -name: Deploy docker image to EC2
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: Aws-final-app 
+          REPOSITORY: aws-final-app 
           IMAGE_TAG: ${{ github.sha }}
-          AWS_DEFAULT_REGION: ap-south-1
+          AWS_DEFAULT_REGION: us-east-1
         uses: appleboy/ssh-action@master
         with:
           host: ${{env.SERVER_PUBLIC_IP}}
